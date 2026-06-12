@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Care Playbook</title>
+<style>
+  :root {
+    --primary: #1a3a5c;
+    --primary-light: #2563a8;
+    --accent: #e85d26;
+    --accent-light: #ff7a45;
+    --teal: #0d7a6e;
+    --teal-light: #e6f5f3;
+    --yellow: #f59e0b;
+    --yellow-light: #fef9ee;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+    --blue-light: #eff6ff;
+    --sidebar-w: 280px;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --bg: #f8fafc;
+    --card: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    color: var(--text);
+    background: var(--bg);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ─── SIDEBAR ─── */
+  #sidebar {
+    width: var(--sidebar-w);
+    background: var(--primary);
+    color: #fff;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sidebar-header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+
+  #sidebar-header .logo {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+  }
+
+  #sidebar-header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+  }
+
+  #sidebar-header p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 4px;
+  }
+
+  #sidebar nav { padding: 12px 0; flex: 1; }
+
+  .nav-group { margin-bottom: 4px; }
+
+  .nav-group-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: rgba(255,255,255,0.4);
+    padding: 12px 20px 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 13.5px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .nav-item.active {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border-left-color: var(--accent-light);
+    font-weight: 600;
+  }
+
+  .nav-item .nav-icon { font-size: 15px; opacity: 0.85; flex-shrink: 0; }
+
+  .nav-sub-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 20px 7px 36px;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 12.5px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .nav-sub-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.05); }
+  .nav-sub-item.active { color: #fff; border-left-color: rgba(255,255,255,0.3); }
+
+  /* ─── MAIN ─── */
+  #main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    min-height: 100vh;
+  }
+
+  .section { display: none; padding: 40px 48px 60px; max-width: 960px; }
+  .section.active { display: block; }
+
+  /* ─── PAGE HEADER ─── */
+  .page-header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .page-header .eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .page-header .subtitle {
+    font-size: 14.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 680px;
+  }
+
+  /* ─── CARDS / SECTIONS ─── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .card h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary);
+    margin: 18px 0 8px;
+  }
+
+  .card p, .card li {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .card ul { padding-left: 20px; margin: 8px 0; }
+  .card li { margin-bottom: 4px; }
+
+  /* ─── PROCESS STEPS ─── */
+  .process-steps { margin: 12px 0; }
+
+  .step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-body { flex: 1; }
+  .step-body strong { font-size: 13.5px; color: var(--primary); display: block; margin-bottom: 2px; }
+  .step-body span { font-size: 13.5px; color: var(--text); line-height: 1.6; }
+
+  /* ─── RESOLUTION BOXES ─── */
+  .resolution-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .res-box {
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+
+  .res-box.valid { background: var(--green-light); border: 1px solid #bbf7d0; }
+  .res-box.invalid { background: var(--red-light); border: 1px solid #fecaca; }
+  .res-box.note { background: var(--yellow-light); border: 1px solid #fde68a; }
+  .res-box.full { grid-column: 1/-1; }
+
+  .res-box h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .res-box.valid h4 { color: var(--green); }
+  .res-box.invalid h4 { color: var(--red); }
+  .res-box.note h4 { color: #92400e; }
+
+  .res-box ul { padding-left: 16px; }
+  .res-box li { font-size: 13px; margin-bottom: 3px; line-height: 1.55; }
+
+  /* ─── BADGE / TAG ─── */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-orange { background: #ffedd5; color: #9a3412; }
+  .badge-green { background: #dcfce7; color: #15803d; }
+  .badge-gray { background: #f1f5f9; color: #475569; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-teal { background: var(--teal-light); color: var(--teal); }
+
+  /* ─── TABLE ─── */
+  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--border); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: var(--primary); color: #fff; }
+  thead th { padding: 11px 14px; text-align: left; font-size: 12px; font-weight: 600; letter-spacing: 0.3px; }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #f8fafc; }
+  tbody td { padding: 11px 14px; vertical-align: top; line-height: 1.55; }
+  tbody td strong { color: var(--primary); }
+
+  /* ─── FAQ ACCORDION ─── */
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .faq-question {
+    padding: 14px 18px;
+    background: var(--card);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    user-select: none;
+  }
+
+  .faq-question:hover { background: var(--blue-light); }
+
+  .faq-arrow {
+    font-size: 11px;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+  .faq-answer {
+    display: none;
+    padding: 14px 18px;
+    background: #fdfdfd;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .faq-item.open .faq-answer { display: block; }
+
+  .faq-variants {
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .faq-customer-answer {
+    background: var(--green-light);
+    border-left: 3px solid var(--green);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 10px;
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  .faq-agent-note {
+    background: var(--yellow-light);
+    border-left: 3px solid var(--yellow);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+
+  .faq-agent-note strong { color: #92400e; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 4px; }
+
+  /* ─── ESCALATION LEVELS ─── */
+  .escalation-levels { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+
+  .level-card {
+    display: flex;
+    gap: 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    align-items: flex-start;
+  }
+
+  .level-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    flex-shrink: 0;
+    color: #fff;
+  }
+
+  .level-1 { background: var(--green); }
+  .level-2 { background: var(--yellow); }
+  .level-3 { background: var(--red); }
+
+  .level-body h3 { font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+  .level-body p { font-size: 13.5px; color: var(--text-muted); }
+
+  /* ─── MONITORING ─── */
+  .monitor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+
+  .monitor-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+
+  .monitor-card .m-icon { font-size: 28px; margin-bottom: 10px; }
+  .monitor-card h4 { font-size: 13.5px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+  .monitor-card p { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ─── WA TEMPLATES ─── */
+  .wa-template {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .wa-template-header {
+    background: #1a3a5c;
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .wa-template-header h3 { font-size: 14px; font-weight: 700; }
+
+  .wa-template-body { padding: 18px 20px; }
+
+  .wa-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .wa-meta {
+    background: var(--bg);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+
+  .wa-meta label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); display: block; margin-bottom: 3px; }
+  .wa-meta span { font-size: 13px; color: var(--text); font-weight: 500; }
+
+  .wa-message {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    color: var(--text);
+    font-family: var(--font);
+  }
+
+  .wa-message-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  /* ─── HOME OVERVIEW ─── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .overview-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+
+  .overview-card:hover {
+    border-color: var(--primary-light);
+    box-shadow: 0 4px 12px rgba(37,99,168,0.12);
+    transform: translateY(-1px);
+  }
+
+  .overview-card .oc-icon { font-size: 26px; margin-bottom: 10px; }
+  .overview-card h3 { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+  .overview-card p { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+
+  .objective-box {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 12px;
+    padding: 28px 32px;
+    color: #fff;
+    margin-bottom: 28px;
+  }
+
+  .objective-box h2 { font-size: 18px; margin-bottom: 10px; }
+  .objective-box p { font-size: 14.5px; line-height: 1.7; opacity: 0.9; }
+
+  /* ─── DIVIDER ─── */
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* ─── INLINE NOTE ─── */
+  .inline-note {
+    background: var(--yellow-light);
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #78350f;
+    margin-top: 12px;
+  }
+
+  .inline-note strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; color: #92400e; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    #sidebar { width: 220px; }
+    #main { margin-left: 220px; }
+    .section { padding: 24px 24px 48px; }
+    .overview-grid { grid-template-columns: 1fr 1fr; }
+    .resolution-grid { grid-template-columns: 1fr; }
+    .monitor-grid { grid-template-columns: 1fr; }
+    .wa-meta-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    #sidebar { transform: translateX(-100%); }
+    #main { margin-left: 0; }
+    .section { padding: 20px 18px 40px; }
+    .overview-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── SCROLLBAR ─── */
+  #sidebar::-webkit-scrollbar { width: 5px; }
+  #sidebar::-webkit-scrollbar-track { background: transparent; }
+  #sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+  /* ─── IRM TABLE ─── */
+  .irm-category { margin-bottom: 20px; }
+  .irm-category h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--primary);
+    padding: 8px 14px;
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 0;
+  }
+  .irm-reasons {
+    border: 1px solid var(--border);
+    border-radius: 0 0 6px 6px;
+    padding: 10px 16px;
+    background: var(--card);
+  }
+  .irm-reasons li { font-size: 13px; margin-bottom: 3px; color: var(--text); }
+  .irm-subcategory { font-size: 11.5px; color: var(--text-muted); font-style: italic; margin-bottom: 4px; }
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════ -->
+<div id="sidebar">
+  <div id="sidebar-header">
+    <div class="logo">Bazaar · Customer Care</div>
+    <h1>Care Playbook</h1>
+    <p>Complaint Resolution Guide</p>
+  </div>
+  <nav>
+    <div class="nav-group">
+      <div class="nav-item active" onclick="showSection('home')">
+        <span class="nav-icon">🏠</span> Overview
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Complaint Handling</div>
+      <div class="nav-item" onclick="showSection('delivery')">
+        <span class="nav-icon">🚚</span> Delivery Issues
+      </div>
+      <div class="nav-sub-item" onclick="showSection('delivery')">1.1 Short Item</div>
+      <div class="nav-sub-item" onclick="showSection('delivery')">1.2 Wrong Item</div>
+      <div class="nav-sub-item" onclick="showSection('delivery')">1.3 Extra Item</div>
+
+      <div class="nav-item" onclick="showSection('quality')">
+        <span class="nav-icon">⚠️</span> Quality Issues
+      </div>
+      <div class="nav-sub-item" onclick="showSection('quality')">2.1 SKU Quality</div>
+      <div class="nav-sub-item" onclick="showSection('quality')">2.2 Item Damaged</div>
+      <div class="nav-sub-item" onclick="showSection('quality')">2.3 Weight Issue</div>
+      <div class="nav-sub-item" onclick="showSection('quality')">2.4 Expired Item</div>
+
+      <div class="nav-item" onclick="showSection('escalation')">
+        <span class="nav-icon">🔄</span> Escalation Matrix
+      </div>
+      <div class="nav-item" onclick="showSection('monitoring')">
+        <span class="nav-icon">📊</span> Monitoring &amp; Feedback
+      </div>
+      <div class="nav-item" onclick="showSection('auto-resolve')">
+        <span class="nav-icon">⚡</span> Auto Resolution
+      </div>
+      <div class="nav-item" onclick="showSection('whatsapp')">
+        <span class="nav-icon">💬</span> WhatsApp Templates
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Knowledge Base v2</div>
+      <div class="nav-item" onclick="showSection('kb-general')">
+        <span class="nav-icon">ℹ️</span> General Info
+      </div>
+      <div class="nav-item" onclick="showSection('kb-account')">
+        <span class="nav-icon">👤</span> Account Management
+      </div>
+      <div class="nav-item" onclick="showSection('kb-orders')">
+        <span class="nav-icon">📦</span> Order Placement
+      </div>
+      <div class="nav-item" onclick="showSection('kb-pricing')">
+        <span class="nav-icon">🏷️</span> Pricing &amp; Stock
+      </div>
+      <div class="nav-item" onclick="showSection('kb-payments')">
+        <span class="nav-icon">💳</span> Payments &amp; Coins
+      </div>
+      <div class="nav-item" onclick="showSection('kb-returns')">
+        <span class="nav-icon">↩️</span> Returns &amp; Refunds
+      </div>
+      <div class="nav-item" onclick="showSection('kb-delivery')">
+        <span class="nav-icon">📍</span> Delivery Tracking
+      </div>
+      <div class="nav-item" onclick="showSection('kb-credit')">
+        <span class="nav-icon">🏦</span> Credit Facility
+      </div>
+      <div class="nav-item" onclick="showSection('kb-tax')">
+        <span class="nav-icon">🧾</span> Taxation
+      </div>
+      <div class="nav-item" onclick="showSection('kb-irm')">
+        <span class="nav-icon">🗂️</span> IRM Matrix
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════ -->
+<div id="main">
+
+  <!-- ── HOME ── -->
+  <div id="home" class="section active">
+    <div class="page-header">
+      <div class="eyebrow">Bazaar Customer Care</div>
+      <h1>Care Playbook</h1>
+      <p class="subtitle">Complaint Resolution Playbook — a clear, consistent, and customer-first guide to handling complaints, ensuring quick resolution, reduced escalations, and enhanced trust.</p>
+    </div>
+
+    <div class="objective-box">
+      <h2>🎯 Objective</h2>
+      <p>To provide a clear, consistent, and customer-first approach to handling complaints related to Delivery Issues and Quality Issues, ensuring quick resolution, reduced escalations, and enhanced trust.</p>
+    </div>
+
+    <div class="overview-grid">
+      <div class="overview-card" onclick="showSection('delivery')">
+        <div class="oc-icon">🚚</div>
+        <h3>Delivery Issues</h3>
+        <p>Short, wrong, or extra items — verification, IRD verdicts, and resolution guidelines.</p>
+      </div>
+      <div class="overview-card" onclick="showSection('quality')">
+        <div class="oc-icon">⚠️</div>
+        <h3>Quality Issues</h3>
+        <p>SKU quality, damages, weight discrepancies, and expired items with QA-led verdicts.</p>
+      </div>
+      <div class="overview-card" onclick="showSection('escalation')">
+        <div class="oc-icon">🔄</div>
+        <h3>Escalation Matrix</h3>
+        <p>Three-level escalation path from front-line support to senior management.</p>
+      </div>
+      <div class="overview-card" onclick="showSection('monitoring')">
+        <div class="oc-icon">📊</div>
+        <h3>Monitoring &amp; Feedback</h3>
+        <p>Weekly trend tracking, repeat offender identification, and preventive action.</p>
+      </div>
+      <div class="overview-card" onclick="showSection('whatsapp')">
+        <div class="oc-icon">💬</div>
+        <h3>WhatsApp Templates</h3>
+        <p>Four communication templates for delay and rescheduling scenarios with apology coins rules.</p>
+      </div>
+      <div class="overview-card" onclick="showSection('kb-irm')">
+        <div class="oc-icon">🗂️</div>
+        <h3>IRM Matrix</h3>
+        <p>Predefined issue category mapping guide for consistent ticket categorisation.</p>
+      </div>
+      <div class="overview-card" onclick="showSection('auto-resolve')">
+        <div class="oc-icon">⚡</div>
+        <h3>Auto Resolution</h3>
+        <p>Criteria and decision tree for auto-resolving Ghar customer delivery &amp; quality complaints.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── DELIVERY ISSUES ── -->
+  <div id="delivery" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Complaint Handling</div>
+      <h1>🚚 Delivery Issues</h1>
+      <p class="subtitle">Standard operating procedure for handling delivery-related complaints. All cases require IRD team verification before resolution.</p>
+    </div>
+
+    <!-- 1.1 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#fff7ed;font-size:20px;">📦</div>
+        <h2>1.1 Short Item Delivered</h2>
+      </div>
+
+      <div class="process-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Complaint Generation</strong>
+            <span>IB team generates complaint and escalates ticket to Resolution team.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Verification</strong>
+            <span>Check order details, SKU Name, and Disputed Quantity with customer over call.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Escalation</strong>
+            <span>Escalate over Slack and G Sheet (Customer Claims Database – National) with IRD team to verify customer claim.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Verdict</strong>
+            <span>IRD team shares verdict in the sheet. Video obtained if necessary and cross-checked.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <strong>Customer History Check</strong>
+            <span>Review complaints history and historic returns before providing resolution.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <strong>Rider History Check</strong>
+            <span>Review rider's complaint history before providing resolution.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="resolution-grid">
+        <div class="res-box valid">
+          <h4>✅ If Valid</h4>
+          <ul>
+            <li>Refund via coins if stock value &lt; PKR 500</li>
+            <li>Place a 0-value order for high-value items</li>
+            <li>Update customer on resolution to close loop</li>
+          </ul>
+        </div>
+        <div class="res-box note">
+          <h4>📋 Note</h4>
+          <ul>
+            <li>Resolution depends on IRD verdict</li>
+            <li>Park the shortage accordingly</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.2 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#fff7ed;font-size:20px;">🔄</div>
+        <h2>1.2 Wrong Item Delivered</h2>
+      </div>
+
+      <div class="process-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Complaint Generation</strong>
+            <span>IB team generates complaint with proof (picture or video).</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Verification</strong>
+            <span>Check order details, SKU Name, Disputed Qty with customer over call.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Escalation</strong>
+            <span>Escalate complaint with difference amount over Slack and G Sheet with IRD team.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Verdict + History Checks</strong>
+            <span>IRD shares verdict. Check customer and rider complaint history.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="resolution-grid">
+        <div class="res-box valid">
+          <h4>✅ If Valid</h4>
+          <ul>
+            <li>Refund difference amount via coins if stock &lt; PKR 500</li>
+            <li>Place RL order for high-value items</li>
+            <li>Update customer on resolution</li>
+          </ul>
+        </div>
+        <div class="res-box note full">
+          <h4>📋 Note + IRD Verdict</h4>
+          <ul>
+            <li>Resolution depends on IRD verdict; park shortage accordingly</li>
+            <li>Resolve according to customer's preference</li>
+            <li>If customer not satisfied with coins, facilitate through coins alternatively</li>
+            <li><strong>Shaheen Error:</strong> RL order delivered to customer and PO generated to balance inventory</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.3 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#f0fdf4;font-size:20px;">➕</div>
+        <h2>1.3 Extra Item Delivered</h2>
+      </div>
+
+      <div class="process-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Complaint Generation</strong>
+            <span>IB team generates complaint with proof shared by customer (picture or video).</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Verification</strong>
+            <span>Check order details, SKU Name, Extra Qty with customer over call.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Escalation</strong>
+            <span>Escalate complaint with video proof over Slack and G Sheet with IRD team.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Verdict</strong>
+            <span>IRD team shares verdict in the sheet.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="resolution-grid">
+        <div class="res-box valid">
+          <h4>✅ Low-Value (Below PKR 500)</h4>
+          <ul>
+            <li>Let customer keep as goodwill</li>
+            <li>Appreciate customer honesty when closing loop</li>
+          </ul>
+        </div>
+        <div class="res-box invalid">
+          <h4>📦 High-Value Items</h4>
+          <ul>
+            <li>Arrange pickup if feasible</li>
+          </ul>
+        </div>
+        <div class="res-box note full">
+          <h4>📋 IRD Verdict Breakdown</h4>
+          <ul>
+            <li><strong>Dispatched Extra (below 500):</strong> Customer keeps as goodwill</li>
+            <li><strong>Dispatched Extra (above 500):</strong> Arrange pickup after aligning customer</li>
+            <li><strong>LM Error:</strong> Align rider with customer to settle payment; shortage logged against Shaheen</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── QUALITY ISSUES ── -->
+  <div id="quality" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Complaint Handling</div>
+      <h1>⚠️ Quality Issues</h1>
+      <p class="subtitle">Process for handling product quality complaints. QA team is the primary verifier for most quality cases.</p>
+    </div>
+
+    <!-- 2.1 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#fef9ee;">🔍</div>
+        <h2>2.1 SKU Quality Issue</h2>
+      </div>
+      <div class="process-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Complaint Generation</strong><span>IB team generates complaint with proof (picture or video).</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Verification</strong><span>Check order details, SKU Name, Disputed Qty with customer over call.</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Escalation</strong><span>Escalate complaint with proof over Slack and G Sheet with QA team.</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>QA Verdict</strong><span>QA team inspects available stock and shares verdict. Video obtained if necessary.</span></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Customer History Check</strong><span>Review customer history before providing resolution.</span></div></div>
+      </div>
+      <div class="resolution-grid">
+        <div class="res-box valid">
+          <h4>✅ If Valid</h4>
+          <ul>
+            <li>Refund amount if &lt; PKR 500</li>
+            <li>Arrange RL if stock ≥ PKR 500</li>
+            <li>Assure customer on improved quality checks</li>
+          </ul>
+        </div>
+        <div class="res-box note">
+          <h4>📋 Note</h4>
+          <ul>
+            <li>Replace with same fresh SKU</li>
+            <li>If stock unavailable: arrange pickup + refund via coins</li>
+            <li>Infested stock: ask customer to discard + refund</li>
+            <li>Shortage parked per QA verdict</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.2 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#fef2f2;">💥</div>
+        <h2>2.2 Item Damaged</h2>
+      </div>
+      <div class="process-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Complaint Generation</strong><span>IB team generates complaint with proof (picture or video).</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Verification</strong><span>Check order details, SKU Name, Disputed Qty over call.</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Escalation</strong><span>Escalate with proof over Slack and G Sheet with IRD team.</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>IRD Verdict</strong><span>IRD validates claim by checking CCTV footage, shares verdict. Video obtained if necessary.</span></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Customer History Check</strong><span>Review customer history before providing resolution.</span></div></div>
+      </div>
+      <div class="resolution-grid">
+        <div class="res-box valid">
+          <h4>✅ If Valid</h4>
+          <ul>
+            <li>Refund if stock &lt; PKR 500</li>
+            <li>Arrange RL if stock ≥ PKR 500</li>
+            <li>Assure customer on improved quality checks</li>
+          </ul>
+        </div>
+        <div class="res-box note full">
+          <h4>📋 Shortage Tagging</h4>
+          <ul>
+            <li><strong>Dispatch Error:</strong> Stock not dispatched in sound condition → tagged to FF team</li>
+            <li><strong>LM Error:</strong> Stock dispatched in sound condition but damaged in vehicle → tagged to LM team</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.3 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#eff6ff;">⚖️</div>
+        <h2>2.3 Weight Issue</h2>
+      </div>
+      <div class="process-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Complaint Generation</strong><span>IB team generates complaint with proof of weight discrepancy (picture or video).</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Verification</strong><span>Check order details, SKU Name, Disputed Qty over call.</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Escalation</strong><span>Escalate with proof over Slack and G Sheet with QA team.</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>QA Verdict</strong><span>QA team inspects available warehouse stock, shares verdict.</span></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Customer History Check</strong><span>Review customer history before providing resolution.</span></div></div>
+      </div>
+      <div class="resolution-grid">
+        <div class="res-box valid">
+          <h4>✅ If Valid</h4>
+          <ul>
+            <li>Refund amount via coins</li>
+            <li>Assure customer on improved quality checks</li>
+            <li>Shortage tagged per QA team verdict</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.4 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#fef2f2;">🗓️</div>
+        <h2>2.4 Expired Item / Short Expiry</h2>
+      </div>
+      <div class="process-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Complaint Generation</strong><span>IB team generates complaint with proof of expiry (picture or video).</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Verification</strong><span>Check order details, SKU Name, Disputed Qty over call.</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Escalation</strong><span>Escalate with proof over Slack and G Sheet with QA team.</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>QA + Care Verdict</strong><span>QA and Care team check available stock via Expiry Dashboard. QA shares verdict in sheet.</span></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Customer History Check</strong><span>Review customer history before providing resolution.</span></div></div>
+      </div>
+      <div class="resolution-grid">
+        <div class="res-box valid">
+          <h4>✅ If Valid</h4>
+          <ul>
+            <li>Immediate Refund or Replacement</li>
+            <li>Pickup item if required</li>
+            <li>Inform customer of resolution; ensure issue won't recur</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ESCALATION MATRIX ── -->
+  <div id="escalation" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Complaint Handling</div>
+      <h1>🔄 Escalation Matrix</h1>
+      <p class="subtitle">Three-tier escalation structure ensuring complaints are handled at the right level with appropriate authority.</p>
+    </div>
+
+    <div class="escalation-levels">
+      <div class="level-card">
+        <div class="level-badge level-1">1</div>
+        <div class="level-body">
+          <h3>Customer Support</h3>
+          <p>Immediate resolution within defined guidelines. Front-line agents handle standard complaints using this playbook without escalation.</p>
+        </div>
+      </div>
+      <div class="level-card">
+        <div class="level-badge level-2">2</div>
+        <div class="level-body">
+          <h3>Operations / QC</h3>
+          <p>Handles verification, recurring issues, and cases requiring team-level investigation (IRD, QA, LM teams).</p>
+        </div>
+      </div>
+      <div class="level-card">
+        <div class="level-badge level-3">3</div>
+        <div class="level-body">
+          <h3>Senior Management</h3>
+          <p>Escalate fraudulent claims, cases with legal implications, or situations that cannot be resolved at Level 1 or 2.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MONITORING ── -->
+  <div id="monitoring" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Operations</div>
+      <h1>📊 Monitoring &amp; Feedback</h1>
+      <p class="subtitle">Continuous monitoring process to identify trends, repeat issues, and implement preventive measures.</p>
+    </div>
+
+    <div class="monitor-grid">
+      <div class="monitor-card">
+        <div class="m-icon">📈</div>
+        <h4>Weekly Trend Tracking</h4>
+        <p>Track complaint category trends on a weekly basis to identify patterns and emerging issues.</p>
+      </div>
+      <div class="monitor-card">
+        <div class="m-icon">🎯</div>
+        <h4>Repeat Offender Identification</h4>
+        <p>Identify repeat offenders across Warehouses, SKUs, and Riders for targeted action.</p>
+      </div>
+      <div class="monitor-card">
+        <div class="m-icon">🛡️</div>
+        <h4>Preventive Measures</h4>
+        <p>Implement preventive actions including agent training and QC process improvements.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AUTO RESOLUTION ── -->
+  <div id="auto-resolve" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Complaint Handling</div>
+      <h1>⚡ Auto Resolution</h1>
+      <p class="subtitle">Criteria for automatically resolving Ghar (Household) customer delivery &amp; quality complaints — based on customer type, payment mode, promo usage, proxy status, and complaint history.</p>
+    </div>
+
+    <!-- DECISION TREE SVG -->
+    <div class="card" style="margin-bottom:24px;padding:24px 16px 16px;">
+      <div class="card-header" style="margin-bottom:12px;">
+        <div class="card-icon" style="background:#eff6ff;">🗺️</div>
+        <h2>Decision Tree — Ghar Customer Profiling</h2>
+      </div>
+      <div style="overflow-x:auto;">
+        <svg viewBox="0 0 1060 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:780px;font-family:'Segoe UI',sans-serif;">
+          <!-- BG -->
+          <rect width="1060" height="520" fill="#f8fafc" rx="10"/>
+
+          <!-- ── ROOT ── -->
+          <rect x="20" y="210" width="180" height="68" rx="10" fill="#1a3a5c"/>
+          <text x="110" y="236" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Ghar Customers</text>
+          <text x="110" y="252" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">Delivery &amp; Quality Issue</text>
+          <text x="110" y="268" text-anchor="middle" fill="rgba(255,255,255,0.65)" font-size="10">Profiling Logic</text>
+
+          <!-- START node -->
+          <circle cx="270" cy="244" r="22" fill="#e85d26"/>
+          <text x="270" y="248" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">Start</text>
+          <line x1="200" y1="244" x2="248" y2="244" stroke="#e85d26" stroke-width="2"/>
+
+          <!-- ── BRANCH A: REORDERING ── -->
+          <line x1="292" y1="244" x2="350" y2="144" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="350" y="120" width="108" height="30" rx="6" fill="#334155"/>
+          <text x="404" y="139" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Reordering</text>
+
+          <!-- Reordering → Promo → Escalate -->
+          <line x1="458" y1="135" x2="530" y2="95" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="530" y="78" width="90" height="24" rx="5" fill="#fef9ee" stroke="#fde68a" stroke-width="1"/>
+          <text x="575" y="93" text-anchor="middle" fill="#92400e" font-size="10.5">Promo</text>
+          <line x1="620" y1="90" x2="670" y2="90" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="670" y="76" width="72" height="26" rx="5" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+          <text x="706" y="93" text-anchor="middle" fill="#dc2626" font-size="10.5" font-weight="700">Escalate</text>
+
+          <!-- Reordering → Non Promo → Proxy Check -->
+          <line x1="458" y1="135" x2="530" y2="145" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="530" y="132" width="90" height="24" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="575" y="147" text-anchor="middle" fill="#334155" font-size="10.5">No Promo</text>
+
+          <!-- → Prepaid -->
+          <line x1="620" y1="144" x2="670" y2="120" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="670" y="107" width="76" height="24" rx="5" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+          <text x="708" y="123" text-anchor="middle" fill="#1d4ed8" font-size="10.5">Prepaid</text>
+
+          <!-- → Complaint Check -->
+          <line x1="746" y1="119" x2="800" y2="119" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="800" y="107" width="110" height="24" rx="5" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="855" y="122" text-anchor="middle" fill="#334155" font-size="10" font-style="italic">Complaints (2 months)</text>
+
+          <!-- ≤1 complaints → value < 1000 → auto -->
+          <line x1="910" y1="119" x2="950" y2="97" stroke="#64748b" stroke-width="1.5"/>
+          <text x="950" y="93" fill="#16a34a" font-size="9.5" font-weight="600">≤ 1 complaint</text>
+          <line x1="1000" y1="92" x2="1035" y2="81" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="930" y="68" width="125" height="34" rx="5" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+          <text x="992" y="81" text-anchor="middle" fill="#166534" font-size="9.5" font-weight="700">Auto-resolve</text>
+          <text x="992" y="93" text-anchor="middle" fill="#15803d" font-size="9">Coins/RL · cap PKR 1000</text>
+
+          <!-- ≥2 complaints → escalate -->
+          <line x1="910" y1="119" x2="950" y2="140" stroke="#64748b" stroke-width="1.5"/>
+          <text x="953" y="136" fill="#dc2626" font-size="9.5" font-weight="600">≥ 2 complaints</text>
+          <rect x="950" y="140" width="72" height="24" rx="5" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+          <text x="986" y="156" text-anchor="middle" fill="#dc2626" font-size="10" font-weight="700">Escalate</text>
+
+          <!-- → Postpaid → Escalate -->
+          <line x1="620" y1="144" x2="670" y2="164" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="670" y="152" width="76" height="24" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="708" y="167" text-anchor="middle" fill="#334155" font-size="10.5">Postpaid</text>
+          <line x1="746" y1="164" x2="790" y2="164" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="790" y="152" width="72" height="24" rx="5" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+          <text x="826" y="167" text-anchor="middle" fill="#dc2626" font-size="10" font-weight="700">Escalate</text>
+
+          <!-- ── BRANCH B: FTO ── -->
+          <line x1="292" y1="244" x2="350" y2="300" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="350" y="276" width="120" height="30" rx="6" fill="#334155"/>
+          <text x="410" y="295" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">FTO (within 48 hrs)</text>
+
+          <!-- FTO → Promo → Escalate -->
+          <line x1="470" y1="291" x2="530" y2="268" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="530" y="256" width="78" height="24" rx="5" fill="#fef9ee" stroke="#fde68a" stroke-width="1"/>
+          <text x="569" y="271" text-anchor="middle" fill="#92400e" font-size="10.5">Promo</text>
+          <line x1="608" y1="268" x2="650" y2="268" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="650" y="256" width="72" height="24" rx="5" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+          <text x="686" y="271" text-anchor="middle" fill="#dc2626" font-size="10" font-weight="700">Escalate</text>
+
+          <!-- FTO → Non Promo → Payment -->
+          <line x1="470" y1="291" x2="530" y2="310" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="530" y="298" width="80" height="24" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="570" y="313" text-anchor="middle" fill="#334155" font-size="10.5">Non Promo</text>
+
+          <!-- → Prepaid -->
+          <line x1="610" y1="310" x2="660" y2="292" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="660" y="280" width="72" height="24" rx="5" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+          <text x="696" y="295" text-anchor="middle" fill="#1d4ed8" font-size="10.5">Prepaid</text>
+          <!-- proxy → escalate -->
+          <line x1="732" y1="292" x2="775" y2="278" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="775" y="266" width="56" height="22" rx="5" fill="#fef9ee" stroke="#fde68a" stroke-width="1"/>
+          <text x="803" y="280" text-anchor="middle" fill="#92400e" font-size="9.5">Proxy</text>
+          <line x1="831" y1="277" x2="865" y2="270" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="865" y="258" width="66" height="22" rx="5" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+          <text x="898" y="273" text-anchor="middle" fill="#dc2626" font-size="9.5" font-weight="700">Escalate</text>
+          <!-- non-proxy → auto -->
+          <line x1="732" y1="292" x2="775" y2="305" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="775" y="294" width="68" height="22" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="809" y="308" text-anchor="middle" fill="#334155" font-size="9.5">Non-Proxy</text>
+          <line x1="843" y1="305" x2="875" y2="305" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="875" y="293" width="125" height="24" rx="5" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+          <text x="937" y="304" text-anchor="middle" fill="#166534" font-size="9.5" font-weight="700">Auto-resolve</text>
+          <text x="937" y="314" text-anchor="middle" fill="#15803d" font-size="9">Coins/RL · cap PKR 500</text>
+
+          <!-- → Postpaid -->
+          <line x1="610" y1="310" x2="660" y2="332" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="660" y="320" width="72" height="24" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="696" y="335" text-anchor="middle" fill="#334155" font-size="10.5">Postpaid</text>
+          <line x1="732" y1="332" x2="775" y2="332" stroke="#64748b" stroke-width="1.5"/>
+          <!-- < 1000 → auto -->
+          <line x1="775" y1="332" x2="820" y2="320" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="820" y="308" width="125" height="24" rx="5" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+          <text x="882" y="319" text-anchor="middle" fill="#166534" font-size="9.5" font-weight="700">Auto-resolve</text>
+          <text x="882" y="329" text-anchor="middle" fill="#15803d" font-size="9">Value &lt; 1000 · Coins/RL</text>
+          <!-- > 1000 → escalate -->
+          <line x1="775" y1="332" x2="820" y2="348" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="820" y="338" width="125" height="22" rx="5" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+          <text x="882" y="353" text-anchor="middle" fill="#dc2626" font-size="9.5" font-weight="700">Escalate · Value &gt; 1000</text>
+
+          <!-- ── BRANCH C: TAT BREACH ── -->
+          <line x1="292" y1="244" x2="350" y2="420" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="350" y="406" width="108" height="28" rx="6" fill="#334155"/>
+          <text x="404" y="423" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">TAT Breach</text>
+          <line x1="458" y1="420" x2="510" y2="420" stroke="#64748b" stroke-width="1.5"/>
+          <rect x="510" y="408" width="72" height="24" rx="5" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+          <text x="546" y="423" text-anchor="middle" fill="#dc2626" font-size="10" font-weight="700">Escalate</text>
+
+          <!-- LEGEND -->
+          <rect x="22" y="450" width="280" height="56" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+          <text x="34" y="467" fill="#64748b" font-size="10" font-weight="600">LEGEND</text>
+          <rect x="34" y="474" width="12" height="12" rx="3" fill="#f0fdf4" stroke="#bbf7d0"/>
+          <text x="50" y="484" fill="#166534" font-size="9.5">Auto-resolve</text>
+          <rect x="120" y="474" width="12" height="12" rx="3" fill="#fef2f2" stroke="#fecaca"/>
+          <text x="136" y="484" fill="#dc2626" font-size="9.5">Escalate</text>
+          <rect x="34" y="492" width="12" height="12" rx="3" fill="#fef9ee" stroke="#fde68a"/>
+          <text x="50" y="502" fill="#92400e" font-size="9.5">Promo / Flag</text>
+          <rect x="120" y="492" width="12" height="12" rx="3" fill="#eff6ff" stroke="#bfdbfe"/>
+          <text x="136" y="502" fill="#1d4ed8" font-size="9.5">Prepaid</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- SUMMARY LOGIC CARDS -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <div class="card-icon" style="background:#f0fdf4;font-size:18px;">🎯</div>
+        <h2>Eligibility Criteria (from SQL)</h2>
+      </div>
+      <p style="font-size:13.5px;color:var(--text-muted);margin-bottom:16px;">Derived from <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;">final_base</code> → <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;">eligible_for_auto_resolve</code> &amp; <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;">max_dispute_amount_allowed</code></p>
+
+      <!-- Escalate Always -->
+      <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:14px 18px;margin-bottom:14px;">
+        <h3 style="color:#dc2626;font-size:14px;margin:0 0 10px;">🚫 Always Escalate — NOT eligible for auto-resolve</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="font-size:13px;line-height:1.7;">
+            <span style="font-weight:600;color:#7f1d1d;">Condition 1:</span> Customer used a <strong>Promo/Voucher</strong> (any order in last 6 months)<br/>
+            <span style="font-size:11.5px;color:#991b1b;background:#fee2e2;padding:1px 6px;border-radius:3px;">promo_flag = 'Promo'</span>
+          </div>
+          <div style="font-size:13px;line-height:1.7;">
+            <span style="font-weight:600;color:#7f1d1d;">Condition 2:</span> <strong>FTO customer who is a Proxy</strong><br/>
+            <span style="font-size:11.5px;color:#991b1b;background:#fee2e2;padding:1px 6px;border-radius:3px;">customer_type = 'FTO' AND is_proxy = 'Yes'</span>
+          </div>
+          <div style="font-size:13px;line-height:1.7;grid-column:1/-1;">
+            <span style="font-weight:600;color:#7f1d1d;">Condition 3:</span> <strong>Returning customer with ≥ 3 escalated complaints in last 2 months</strong><br/>
+            <span style="font-size:11.5px;color:#991b1b;background:#fee2e2;padding:1px 6px;border-radius:3px;">customer_type ≠ 'FTO' AND escalated_complaints_last_2m ≥ 3</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auto-resolve tiers -->
+      <h3 style="font-size:14px;margin:0 0 10px;color:var(--primary);">✅ Auto-Resolve Tiers</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Customer Type</th>
+              <th>Proxy?</th>
+              <th>Promo?</th>
+              <th>Complaints (last 2M)</th>
+              <th>Payment</th>
+              <th>Max Dispute Cap</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-blue">FTO</span></td>
+              <td>No</td>
+              <td>No</td>
+              <td>Any</td>
+              <td>Prepaid</td>
+              <td><strong>PKR 500</strong></td>
+              <td><span class="badge badge-green">Auto-resolve</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">FTO</span></td>
+              <td>No</td>
+              <td>No</td>
+              <td>Any</td>
+              <td>Postpaid (Cash)</td>
+              <td><strong>PKR 500</strong></td>
+              <td><span class="badge badge-green">Auto-resolve</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-teal">Returning</span></td>
+              <td>—</td>
+              <td>No</td>
+              <td><strong>≤ 1</strong></td>
+              <td>Prepaid</td>
+              <td><strong>PKR 1000</strong></td>
+              <td><span class="badge badge-green">Auto-resolve</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-teal">Returning</span></td>
+              <td>—</td>
+              <td>No</td>
+              <td><strong>= 2</strong></td>
+              <td>Prepaid</td>
+              <td><strong>PKR 500</strong></td>
+              <td><span class="badge badge-green">Auto-resolve</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-teal">Returning</span></td>
+              <td>—</td>
+              <td>No</td>
+              <td><strong>≥ 3</strong></td>
+              <td>Any</td>
+              <td>—</td>
+              <td><span class="badge badge-red">Escalate</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-teal">Returning</span></td>
+              <td>—</td>
+              <td>No</td>
+              <td>Any</td>
+              <td>Postpaid (Cash)</td>
+              <td>—</td>
+              <td><span class="badge badge-red">Escalate</span></td>
+            </tr>
+            <tr>
+              <td>Any</td>
+              <td>—</td>
+              <td><strong>Yes</strong></td>
+              <td>Any</td>
+              <td>Any</td>
+              <td>—</td>
+              <td><span class="badge badge-red">Escalate</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">FTO</span></td>
+              <td><strong>Yes</strong></td>
+              <td>No</td>
+              <td>Any</td>
+              <td>Any</td>
+              <td>—</td>
+              <td><span class="badge badge-red">Escalate</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RESOLUTION METHOD -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <div class="card-icon" style="background:#eff6ff;font-size:18px;">💡</div>
+        <h2>Resolution Method — When Auto-Resolved</h2>
+      </div>
+      <p style="font-size:13.5px;line-height:1.7;margin-bottom:14px;">When a complaint is eligible for auto-resolve and the dispute value is within the cap, resolution is offered on <strong>customer's choice</strong>:</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="background:var(--teal-light);border:1px solid #a7f3d0;border-radius:8px;padding:14px 16px;">
+          <h4 style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:6px;">🪙 Option A — Coins Refund</h4>
+          <p style="font-size:13px;line-height:1.6;color:#134e4a;">Disputed amount credited to customer's Bazaar Wallet as coins. Instant, no logistics required.</p>
+        </div>
+        <div style="background:var(--blue-light);border:1px solid #bfdbfe;border-radius:8px;padding:14px 16px;">
+          <h4 style="font-size:13px;font-weight:700;color:#1e40af;margin-bottom:6px;">🔄 Option B — Reverse Logistics (RL)</h4>
+          <p style="font-size:13px;line-height:1.6;color:#1e3a8a;">Pickup arranged for wrong/damaged item and correct item dispatched or refund issued after pickup.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEFINITIONS -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:#fef9ee;font-size:18px;">📖</div>
+        <h2>Key Definitions from SQL</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>How It's Computed</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>customer_type = 'FTO'</strong></td><td>First order within the last 15 days AND total booked orders = 1</td></tr>
+            <tr><td><strong>is_proxy = 'Yes'</strong></td><td>Store ID found in Mixpanel + Google Analytics cross-match (device advertising ID match in last 13 days)</td></tr>
+            <tr><td><strong>promo_flag = 'Promo'</strong></td><td>Any order in last 6 months with discount_type = 'VOUCHER'</td></tr>
+            <tr><td><strong>payment_flag = 'Prepaid'</strong></td><td>Any payment mode includes CARD, DIGITAL_PAYMENT, or WALLET in last 6 months</td></tr>
+            <tr><td><strong>escalated_complaints_last_2m</strong></td><td>Count of distinct escalated issue_numbers in last 2 months (customer support issues, excluding self-resolved)</td></tr>
+            <tr><td><strong>Eligible issues</strong></td><td>Covers: Short/wrong/extra delivery, late delivery, damaged, expired, weight issue, quality, MRP, cash shortage, agent behaviour, etc.</td></tr>
+            <tr><td><strong>Lookup window</strong></td><td>6 months for order history; 2 months for complaint check; 13 days for proxy detection</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAT NOTE -->
+    <div class="inline-note" style="margin-top:16px;">
+      <strong>⚠️ TAT Breach Exception</strong>
+      Any case with a TAT breach (order delayed beyond committed SLA) is automatically escalated regardless of the above criteria — it bypasses the auto-resolve flow entirely.
+    </div>
+  </div>
+
+  <!-- ── WHATSAPP TEMPLATES ── -->
+  <div id="whatsapp" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Communication</div>
+      <h1>💬 WhatsApp Customer Communication Playbook</h1>
+      <p class="subtitle">Communication flow for delayed orders due to weather or operational reasons. Four templates covering different delay scenarios.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header"><h2>📌 Apology Coins Rule (General)</h2></div>
+      <p style="font-size:14px;line-height:1.7;">Default rule unless stated otherwise: <strong>5% of order GMV</strong>, minimum <strong>PKR 100</strong>, maximum <strong>PKR 500</strong>.</p>
+    </div>
+
+    <!-- Template 1 -->
+    <div class="wa-template">
+      <div class="wa-template-header">
+        <h3>1. b2c Proactive Update Before Delay</h3>
+        <span class="badge badge-gray">No Image</span>
+      </div>
+      <div class="wa-template-body">
+        <div class="wa-meta-grid">
+          <div class="wa-meta"><label>When to Send</label><span>Order rescheduled due to weather or operational delays</span></div>
+          <div class="wa-meta"><label>Apology Coins</label><span>5% of GMV · Min 100 · Max 500</span></div>
+          <div class="wa-meta" style="grid-column:1/-1"><label>Message Highlights</label><span>Inform customer of new delivery date, assure transparency, remind about apology coins.</span></div>
+        </div>
+        <div class="wa-message-label">Sample Message</div>
+        <div class="wa-message">Hi [Cst Name],
+
+Due to heavy rains in your area, your order ([#Order_No]) might be delayed today.
+
+We are closely monitoring the situation and will keep you updated.
+
+You can always check the latest status in the order details on the app.
+
+Thank you for your patience and trust in us. 💙</div>
+      </div>
+    </div>
+
+    <!-- Template 2 -->
+    <div class="wa-template">
+      <div class="wa-template-header">
+        <h3>2. b2c Rescheduled Delivery</h3>
+        <span class="badge badge-blue">🖼️ Image A</span>
+      </div>
+      <div class="wa-template-body">
+        <div class="wa-meta-grid">
+          <div class="wa-meta"><label>When to Send</label><span>When delay is anticipated before the promised delivery time</span></div>
+          <div class="wa-meta"><label>Apology Coins</label><span>5% of GMV · Min 100 · Max 500</span></div>
+          <div class="wa-meta" style="grid-column:1/-1"><label>Message Highlights</label><span>Empathetic apology, inform in advance, mention apology coins.</span></div>
+        </div>
+        <div class="wa-message-label">Sample Message</div>
+        <div class="wa-message">Hi [Cst Name],
+
+We're really sorry your order ([#Order_No]) cannot be delivered today due to the weather. We are rescheduling and will confirm your new delivery date soon.
+
+As a small token of apology, we have added PKR [ApologyCoins] worth of coins to your wallet.
+
+You can view updates in the order details on the app. If you have any questions, just tap below, we're always here to help! 💙
+
+Thank you for your patience and trust in us.</div>
+      </div>
+    </div>
+
+    <!-- Template 3 -->
+    <div class="wa-template">
+      <div class="wa-template-header">
+        <h3>3. b2c Delay Confirmation with Apology</h3>
+        <span class="badge badge-blue">🖼️ Image A</span>
+      </div>
+      <div class="wa-template-body">
+        <div class="wa-meta-grid">
+          <div class="wa-meta"><label>When to Send</label><span>When order has already been delayed beyond committed slot</span></div>
+          <div class="wa-meta"><label>Apology Coins</label><span>5% of GMV · Min 100 · Max 500</span></div>
+          <div class="wa-meta" style="grid-column:1/-1"><label>Message Highlights</label><span>Apology, confirm new timeline, highlight apology coins for compensation.</span></div>
+        </div>
+        <div class="wa-message-label">Sample Message</div>
+        <div class="wa-message">Hi [Cst Name],
+
+We have an update for your order ([#Order_No]). It will now be attempted for delivery on [Delivery Date].
+
+Just a reminder, we have also added apology coins (PKR [ApologyCoins]) in your account.
+
+In case of any further changes, we'll let you know in advance. Meanwhile, you can check the updated delivery time in your order details on the app.
+
+Thank you for waiting and for your continued trust in us. 💙</div>
+      </div>
+    </div>
+
+    <!-- Template 4 -->
+    <div class="wa-template">
+      <div class="wa-template-header">
+        <h3>4. b2c Delivery Confirmation</h3>
+        <span class="badge badge-green">🖼️ Image B</span>
+      </div>
+      <div class="wa-template-body">
+        <div class="wa-meta-grid">
+          <div class="wa-meta"><label>When to Send</label><span>After the order has been successfully delivered</span></div>
+          <div class="wa-meta"><label>Apology Coins</label><span>Not applicable (no coins)</span></div>
+          <div class="wa-meta" style="grid-column:1/-1"><label>Message Highlights</label><span>Confirmation of successful delivery, thank customer for trust.</span></div>
+        </div>
+        <div class="wa-message-label">Sample Message</div>
+        <div class="wa-message">Hi [Cst name],
+
+Your order (#Order no) has been delivered. Thank you for waiting and we sincerely apologize again for the delay.
+
+We appreciate your patience and trust in us. 💙</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KB: GENERAL INFO ── -->
+  <div id="kb-general" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Knowledge Base v2</div>
+      <h1>ℹ️ General Info about Bazaar</h1>
+      <p class="subtitle">FAQs about what Bazaar is, what it sells, delivery coverage, and who it serves.</p>
+    </div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">What is Bazaar? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">What is Bazaar?</span>
+          <span class="badge badge-gray">What do you do?</span>
+          <span class="badge badge-gray">What kind of company is Bazaar?</span>
+        </div>
+        <div class="faq-customer-answer">
+          Bazaar provides grocery convenience for household customers and retailers in over 8 cities. You can order a wide range of food and grocery products through our mobile app or website. Place your order today and receive next-day delivery.
+        </div>
+        <div class="faq-agent-note">
+          <strong>🔒 Agent Note</strong>
+          Category: General FAQs → About Bazaar | Tags: general_info, what_is_bazaar | Create General Information ticket | Refer to "Order placement and delivery" FAQs for cities Bazaar operates in.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">Who does Bazaar sell to? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">Who does Bazaar sell to?</span>
+          <span class="badge badge-gray">Is Bazaar only for shops or also for homes?</span>
+        </div>
+        <div class="faq-customer-answer">
+          Bazaar sells food and grocery products. You can purchase through our app (Google Play / Apple App Store) or at bazaarapp.com. We do <strong>not</strong> sell: electronics, beauty &amp; cosmetics, cars, apparel, or home furnishing. Our customers include: household shoppers, retailers, offices &amp; institutions, and restaurants &amp; food businesses.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KB: ACCOUNT ── -->
+  <div id="kb-account" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Knowledge Base v2</div>
+      <h1>👤 Account Management</h1>
+      <p class="subtitle">FAQs covering registration, login, OTP issues, account types, blocked/inactive accounts, phone number changes, and account deletion.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <p style="font-size:13.5px;line-height:1.7;">Each FAQ includes a <strong>customer-facing answer</strong> (safe to share) and <strong>agent-only notes</strong> (internal metadata, tags, escalation guidance).</p>
+    </div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">How do I register or sign up on Bazaar? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">How do I login?</span>
+          <span class="badge badge-gray">How do I add my number on Bazaar?</span>
+          <span class="badge badge-gray">Register karna hai</span>
+        </div>
+        <div class="faq-customer-answer">
+          You can register on Bazaar in a few simple steps: Download the Bazaar app from Google Play or the App Store. Enter your mobile number and verify with the OTP sent to you. Fill in your basic details to complete registration.
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h3 style="margin-top:0;">Document Scope</h3>
+      <p style="font-size:13.5px;line-height:1.7;margin-top:8px;">This knowledge base covers:</p>
+      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;">
+        <span class="badge badge-blue">Registration &amp; Login</span>
+        <span class="badge badge-blue">OTP Issues</span>
+        <span class="badge badge-blue">Account Type &amp; Tax Status</span>
+        <span class="badge badge-blue">Retailer Registration</span>
+        <span class="badge badge-blue">Blocked/Inactive Accounts</span>
+        <span class="badge badge-blue">Phone Number Changes</span>
+        <span class="badge badge-blue">Account Deletion</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KB: ORDERS ── -->
+  <div id="kb-orders" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Knowledge Base v2</div>
+      <h1>📦 Order Placement, Value, Location &amp; Charges</h1>
+      <p class="subtitle">FAQs covering order placement, min/max order value, delivery fees, free-delivery thresholds, location management, and app navigation.</p>
+    </div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">What are your delivery days and timings? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">What time do you deliver?</span>
+          <span class="badge badge-gray">Can I schedule my order to arrive in afternoon?</span>
+          <span class="badge badge-gray">Same-day delivery mil sakti hai?</span>
+          <span class="badge badge-gray">When will my order arrive?</span>
+        </div>
+        <div class="faq-customer-answer">
+          Bazaar offers next-day delivery. Orders placed today will be delivered the next business day. You cannot select a specific time slot — delivery windows are assigned on the delivery day.
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h3 style="margin-top:0;">Topics Covered in This Section</h3>
+      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;">
+        <span class="badge badge-teal">Order Placement</span>
+        <span class="badge badge-teal">Min/Max Order Value</span>
+        <span class="badge badge-teal">Delivery Fees</span>
+        <span class="badge badge-teal">Free Delivery Threshold</span>
+        <span class="badge badge-teal">Order Errors</span>
+        <span class="badge badge-teal">App Integrity Errors</span>
+        <span class="badge badge-teal">Location / Address Management</span>
+        <span class="badge badge-teal">Cart Building &amp; Checkout</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KB: PRICING ── -->
+  <div id="kb-pricing" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Knowledge Base v2</div>
+      <h1>🏷️ Pricing, Out of Stock &amp; Availability</h1>
+      <p class="subtitle">FAQs on stock availability, restocking timelines, and price-related queries.</p>
+    </div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">How do I know if a product is in stock? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">Yeh item maujood hai?</span>
+          <span class="badge badge-gray">Is this available right now?</span>
+          <span class="badge badge-gray">Stock kahan dekhun?</span>
+        </div>
+        <div class="faq-customer-answer">
+          Search the item using the search bar on the home page or use brand filters inside each category page. Products that are out of stock will be clearly marked as "Sold Out." Tap the 🔔 bell icon on sold-out items to get a push notification when they are restocked.
+        </div>
+        <div class="faq-agent-note">
+          <strong>🔒 Agent Note</strong>
+          Category: Stock Availability → How to Check Stock | Tags: availability, in_stock, search, brand filter | When asked about a specific product → run product_catalog_search first | Create ticket under: Stock availability info
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">When will this item be available again? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">When will this item be available?</span>
+          <span class="badge badge-gray">Yeh item kab aayega?</span>
+        </div>
+        <div class="faq-customer-answer">
+          We cannot guarantee a specific restock date. You can tap the bell icon on the product to get notified as soon as it becomes available.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KB: PAYMENTS ── -->
+  <div id="kb-payments" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Knowledge Base v2</div>
+      <h1>💳 Payments, Coins, Wallet, Vouchers &amp; Discounts</h1>
+      <p class="subtitle">Accepted payment methods, coins/wallet usage, vouchers, and promotional deals.</p>
+    </div>
+
+    <div class="card" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#bfdbfe;margin-bottom:20px;">
+      <p style="font-size:13.5px;line-height:1.6;color:#1e40af;"><strong>Note:</strong> Bazaar has <strong>no vouchers</strong> at the moment.</p>
+    </div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">What payment methods does Bazaar accept? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">How can I pay for my order?</span>
+          <span class="badge badge-gray">Is card or JazzCash accepted?</span>
+          <span class="badge badge-gray">Do you have COD?</span>
+        </div>
+        <div class="faq-customer-answer">
+          <strong>Accepted payment methods:</strong><br/>
+          • Cash on Delivery (COD)<br/>
+          • Card on Delivery (card machine)<br/>
+          • Credit/Debit Card – Online Prepayment<br/>
+          • Bazaar Coins (Wallet)<br/>
+          • JazzCash (Prepaid only) – <em>temporarily closed</em><br/><br/>
+          These are the only official payment methods available in the app.
+        </div>
+        <div class="faq-agent-note">
+          <strong>🔒 Agent Note</strong>
+          Category: Payments → Payment Methods | Tags: payment_methods, accepted_payments | Create "Payment Method – General Info" ticket if customer needs more help
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">What payment methods are NOT available? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-customer-answer">
+          Bazaar does not accept EasyPaisa, bank transfers, cheques, or any other digital wallets beyond what is listed in the app. JazzCash prepaid is currently temporarily unavailable.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KB: RETURNS ── -->
+  <div id="kb-returns" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Knowledge Base v2</div>
+      <h1>↩️ Returns, Refunds &amp; Exchanges</h1>
+      <p class="subtitle">Return/exchange policy, eligible items, timelines, and refund process.</p>
+    </div>
+
+    <div class="card" style="background:#fef2f2;border-color:#fecaca;margin-bottom:20px;">
+      <h3 style="margin-top:0;color:#dc2626;">⏱️ 48-Hour Rule</h3>
+      <p style="font-size:14px;line-height:1.7;margin-top:8px;">All complaints must be reported <strong>within 48 hours</strong> of receiving the order via the Bazaar WhatsApp helpline. Requests after 48 hours are not eligible — though we still log the ticket.</p>
+    </div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">What is Bazaar's return and exchange policy? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">What is your return policy?</span>
+          <span class="badge badge-gray">Can I exchange an item?</span>
+          <span class="badge badge-gray">How long do I have to report an issue?</span>
+        </div>
+        <div class="faq-customer-answer">
+          All complaints must be reported within 48 hours of receiving your order through the Bazaar WhatsApp helpline. Requests after 48 hours are not eligible for refund or exchange. Items can be exchanged if you received a wrong, faulty, expired, or damaged item — or if you ordered by mistake.
+        </div>
+        <div class="faq-agent-note">
+          <strong>🔒 Agent Note</strong>
+          Category: Returns &amp; Refunds → Return/Exchange Policy | Tags: return_policy, exchange_policy, 48hr_rule | If complaint older than 48 hours → inform customer but still log ticket
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">Which items CANNOT be returned or exchanged? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">What items are not returnable?</span>
+          <span class="badge badge-gray">Can I return tobacco or imported items?</span>
+          <span class="badge badge-gray">Is HPC exchangeable?</span>
+        </div>
+        <div class="faq-customer-answer">
+          The following categories are <strong>not eligible</strong> for return or exchange:<br/>
+          • Tobacco / Nicotine products<br/>
+          • Promotional or sale items<br/>
+          • Health &amp; Personal Care (HPC)<br/>
+          • Imported goods<br/>
+          • Pet supplies
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KB: DELIVERY TRACKING ── -->
+  <div id="kb-delivery" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Knowledge Base v2</div>
+      <h1>📍 Order Delivery, Tracking &amp; Updates</h1>
+      <p class="subtitle">How to track orders, delivery notifications, delay complaints, and rider contact.</p>
+    </div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">How can I check my delivery status? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">Where is my order?</span>
+          <span class="badge badge-gray">Rider kahan tak pohoncha?</span>
+          <span class="badge badge-gray">Status not visible</span>
+        </div>
+        <div class="faq-customer-answer">
+          Bazaar offers next-day delivery. On the delivery day, track your order in the app:<br/><br/>
+          1. Open the App<br/>
+          2. Go to Account → Orders<br/>
+          3. Select your Dispatched Order<br/><br/>
+          You'll see a 3-hour delivery window once your order is dispatched. The rider will contact you on your registered number before arriving. If the delivery window isn't visible, your order hasn't been dispatched yet. "All orders" shows confirmed but not-yet-dispatched orders and all previously delivered orders.
+        </div>
+        <div class="faq-agent-note">
+          <strong>🔒 Agent Note</strong>
+          Category: Delivery → Tracking | Tags: order_status, delivery_window
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">Will you notify me about my order? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-customer-answer">
+          Yes, Bazaar sends push notifications whenever there is an update to your order's delivery status. Make sure push notifications are enabled for the Bazaar app.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KB: CREDIT ── -->
+  <div id="kb-credit" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Knowledge Base v2</div>
+      <h1>🏦 Credit Lending Facility</h1>
+      <p class="subtitle">Bazaar offers a lending/credit facility to <em>selected retail customers only</em> — this is not a credit card.</p>
+    </div>
+
+    <div class="card" style="background:#fff7ed;border-color:#fed7aa;margin-bottom:20px;">
+      <p style="font-size:13.5px;line-height:1.7;color:#9a3412;">⚠️ <strong>Important:</strong> This facility is NOT a credit card. It is a lending facility provided at the company's discretion based on order history, business activity, and relationship with Bazaar.</p>
+    </div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">Who is eligible for Bazaar Credit? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">How can I get credit on Bazaar?</span>
+          <span class="badge badge-gray">Am I eligible for credit?</span>
+          <span class="badge badge-gray">Why don't I have the credit option?</span>
+        </div>
+        <div class="faq-customer-answer">
+          Bazaar offers a credit facility only to selected retail customers. Eligibility depends on factors like your order history, business activity, repayment record, and overall relationship with Bazaar. This facility is provided entirely at the company's discretion and is not available for all customers.
+        </div>
+        <div class="faq-agent-note">
+          <strong>🔒 Agent Note</strong>
+          Category: Lending / Credit → Eligibility | Tags: credit_eligibility, selective_credit | If customer insists they should be eligible → create "Credit Eligibility Check" ticket
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">Is the credit facility available in my city? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-customer-answer">
+          The credit facility is available in select cities and to select customers only. Availability is determined by Bazaar at its discretion. Contact support to check if you are eligible in your area.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KB: TAXATION ── -->
+  <div id="kb-tax" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Knowledge Base v2</div>
+      <h1>🧾 Taxation</h1>
+      <p class="subtitle">Tax details for all customer types — retailers and household — including how to view tax breakdowns and item-wise tax.</p>
+    </div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">Can I check tax details for my Bazaar order in the app? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">Mein filer hoon — kya mein tax details dekh sakta hoon?</span>
+          <span class="badge badge-gray">Where can I view tax breakdown?</span>
+        </div>
+        <div class="faq-customer-answer">
+          Yes. After placing your order, go to the <strong>Order List</strong> in the Accounts section and open your bill. There you can view all tax adjustments applied to your order.
+        </div>
+        <div class="faq-agent-note">
+          <strong>🔒 Agent Note</strong>
+          Category: Taxation → General Tax Queries | Tags: tax_details, filer_queries
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">Can I see item-wise tax details? <span class="faq-arrow">▼</span></div>
+      <div class="faq-answer">
+        <div class="faq-variants">
+          <span class="badge badge-gray">Item base tax dekh sakta hoon?</span>
+          <span class="badge badge-gray">How do I view tax per product?</span>
+        </div>
+        <div class="faq-customer-answer">
+          Yes. Go to your Order List in the Accounts section, open the order, and <strong>download the receipt</strong>. The receipt will show item-level tax details for your entire order.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KB: IRM MATRIX ── -->
+  <div id="kb-irm" class="section">
+    <div class="page-header">
+      <div class="eyebrow">Knowledge Base v2</div>
+      <h1>🗂️ IRM Matrix</h1>
+      <p class="subtitle">Predefined Issue Categories Mapping Guide — use this to correctly categorise every ticket.</p>
+    </div>
+
+    <div class="irm-category">
+      <h3>General Info</h3>
+      <div class="irm-reasons">
+        <p class="irm-subcategory">Issue Category: General Info</p>
+        <ul>
+          <li>General Info about Bazaar</li>
+          <li>Suggestion or Feedback</li>
+          <li>Bill Payment / Topup info</li>
+          <li>Application Navigation</li>
+          <li>Registration Process Info</li>
+          <li>Delivery Time / Delivery Charges Info</li>
+          <li>Bazaar Careers Info</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="irm-category">
+      <h3>Pricing Queries</h3>
+      <div class="irm-reasons">
+        <p class="irm-subcategory">Issue Category: Pricing &amp; Stock Issue</p>
+        <ul>
+          <li>Rates and pricing information</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="irm-category">
+      <h3>Credit or Lending Services</h3>
+      <div class="irm-reasons">
+        <p class="irm-subcategory">Issue Category: Credit Issue</p>
+        <ul>
+          <li>Credit is blocked</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="irm-category">
+      <h3>Account Activation Requests</h3>
+      <div class="irm-reasons">
+        <p class="irm-subcategory">Issue Category: Account Changes Request</p>
+        <ul>
+          <li>Blacklisted customer requesting for activation</li>
+          <li>Change in Profile</li>
+          <li>Wrong store type selected</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="irm-category">
+      <h3>Application Issues <span style="font-size:12px;font-weight:400;">(ask for image evidence)</span></h3>
+      <div class="irm-reasons">
+        <p class="irm-subcategory">Issue Category: Application Issue</p>
+        <ul>
+          <li>Login OTP issue</li>
+          <li>Bill payment status not updated</li>
+          <li>Batwa code not received</li>
+          <li>Top up / Package error</li>
+          <li>Unable to place an order</li>
+          <li>Unable to add Card</li>
+          <li>Invoice Error</li>
+          <li>Location Selection Error</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="irm-category">
+      <h3>Order Complaints — Delivery</h3>
+      <div class="irm-reasons">
+        <p class="irm-subcategory">Issue Category: Order Complaint → Delivery</p>
+        <ul>
+          <li>Short item delivered</li>
+          <li>Wrong item delivered</li>
+          <li>Extra item delivered</li>
+          <li>Order not delivered</li>
+          <li>Partial delivery</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="irm-category">
+      <h3>Order Complaints — Quality</h3>
+      <div class="irm-reasons">
+        <p class="irm-subcategory">Issue Category: Order Complaint → Quality</p>
+        <ul>
+          <li>SKU quality issue</li>
+          <li>Item damaged</li>
+          <li>Weight issue</li>
+          <li>Expired / short expiry item</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="irm-category">
+      <h3>Returns &amp; Refunds</h3>
+      <div class="irm-reasons">
+        <p class="irm-subcategory">Issue Category: Return &amp; Refund</p>
+        <ul>
+          <li>Customer wants to return an item</li>
+          <li>Refund request</li>
+          <li>Exchange request</li>
+          <li>Coins refund</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="irm-category">
+      <h3>Payments</h3>
+      <div class="irm-reasons">
+        <p class="irm-subcategory">Issue Category: Payment Issue</p>
+        <ul>
+          <li>Payment deducted but order not placed</li>
+          <li>COD amount discrepancy</li>
+          <li>Wallet / coins deduction issue</li>
+          <li>Payment method not available</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     JS
+══════════════════════════════════════ -->
+<script>
+  function showSection(id) {
+    // hide all sections
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    // show target
+    const target = document.getElementById(id);
+    if (target) { target.classList.add('active'); }
+    // update nav active state
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.remove('active');
+      if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'" + id + "'")) {
+        item.classList.add('active');
+      }
+    });
+    // scroll to top
+    document.getElementById('main').scrollTo(0, 0);
+    window.scrollTo(0, 0);
+  }
+
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    item.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
